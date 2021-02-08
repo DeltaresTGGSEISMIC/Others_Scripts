@@ -48,7 +48,7 @@ def ProRail_Viz_load_ACC_Data(ACCFiles,fs,sel_chan):
     
     RETURN:
         
-        data_acc: Extracted traces from desired channels
+        data_acc: Extracted traces from desired channels in m/s2
         time_acc: time vector for extractec traces.
     
     """
@@ -108,7 +108,7 @@ def ProRail_Viz_load_ACC_Data(ACCFiles,fs,sel_chan):
         chan_index[ix]=index
     
 
-    # Calibration factors to convert volts to mg
+    # Calibration factors [mg/volts] to convert volts to mg
 
     cal_fact = np.array([-203.874, -206.249, -207.018,-202.265,-203.190,-202.429,-197.336,-194.420,-198.748,-202.573,-88.917,-93.756,-94.011,-90.921,-88.480,-92.473,-203.046,-94.424,-95.007,-199.900,-203.479,-89.206])
 
@@ -135,7 +135,7 @@ def ProRail_Viz_load_ACC_Data(ACCFiles,fs,sel_chan):
 
     data_acc = ((data_acc/1000)*cal_fact[chan_index]) # convert volts to mm/s2 (acceleration are divided by 1000 to convert to g's)
 
-    return(data_acc*9.81*1000,time_acc)
+    return(data_acc*9.81,time_acc)
     
     
 
@@ -147,8 +147,8 @@ def ProRail_filter(data,fs,fmin,fmax):
         
         data: ndim - array
         fs: sanmpling frequency in Hz
-        fmin: minimum frequency
-        fmax: maximum frequency
+        fmin: minimum frequency in Hz
+        fmax: maximum frequency in Hz
         detrend: string set as "True by default"
         filter_signal = string if True filtering is applied, if False signal is not filtered
     
@@ -213,7 +213,7 @@ def plot_2C_transducers(data_2c,params):
         
     RETURN:
             
-         Plots the selected signals  
+         Plot the selected signals  
     
     """
     
@@ -394,7 +394,7 @@ def plot_3C_transducers(data_2c,params):
 #%% #######################################################END OF MAIN FUNCTIONS#########################################################################################3
 
 if __name__ == '__main__':
-    path = r'D:\ProRail_Data_Vizualization' # directory should be replaced by the correct user’s directory
+    path = r'D:\ProRail_Scripts\ProRail_Python_Scripts\sampledata' # directory should be replaced by the correct user’s directory
     import glob
     import os
     os.chdir(path)    
@@ -405,9 +405,9 @@ if __name__ == '__main__':
     
     # Selecting components to be analized
     sel_chan = ['tc1_v','tc1_hl','tc1_he']              # Components names to be processed
-    fs      = 1000                                      # Sampling frequency   
-    fmin    = 1.0                                       # Minimum frequency limit for filtering
-    fmax    = 50.0                                      # Maximum frequency limit for filtering
+    fs      = 1000                                      # Sampling frequency [Hz]  
+    fmin    = 1.0                                       # Minimum frequency limit for filtering [Hz]
+    fmax    = 50.0                                      # Maximum frequency limit for filtering [Hz]
     
     data_2c_raw,time = ProRail_Viz_load_ACC_Data(ACCFiles[0],fs,sel_chan)  # Loading raw traces
     filt_dat = ProRail_filter(data_2c_raw,fs,fmin,fmax)                    # Filtering extracted traces
@@ -415,12 +415,12 @@ if __name__ == '__main__':
     
     # Dictionary of parameters for processing
     
-    amp     = 70                                       # User selected amplitude
+    amp     = 0.07                                       # User selected amplitude
     t_len   = 30                                        # time in seconds at the right and left side of train time. 
     t_start = timedate.datetime(2020, 11, 9, 14, 10,4)  # initial record time provided in the culemborg0xxx.seq file
     t_sel   = timedate.datetime(2020, 11, 9, 14, 40,4) # time when tran was passing provided by the user
     plot_all= 'true'                                    # if "true" the whole record length will be ploted. If false the a segment of 2*t_len will be plotted containing the selected trin signal
-    amplitude_type = 'mm/s2'                             # units of amplitude e.g. acceleration, velocity or displacement
+    amplitude_type = 'm/s2'                             # units of amplitude e.g. acceleration, velocity or displacement
     params={'fs':fs,'fmax':fmin,'fmin':fmax,'t_len':t_len,'t_start':t_start,'t_sel':t_sel,'plot_all':plot_all,\
             'sel_chan':sel_chan,'amplitude_type':amplitude_type}
     

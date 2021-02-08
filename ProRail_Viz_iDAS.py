@@ -131,7 +131,7 @@ def plot_imshow(data,rec_name,first_channel,n_traces,start_time,end_time,save_fi
 
 if __name__ == '__main__':
     import os
-    path = r'D:\ProRail_Data_Vizualization' # directory should be replaced by the correct user’s directory.
+    path = r'D:\ProRail_Scripts\ProRail_Python_Scripts\sampledata' # directory should be replaced by the correct user’s directory
     os.chdir(path)
     Allfiles,props,fs,n_samples,distance,dx=ProRail_Viz_init_iDAS_Data(path)
     
