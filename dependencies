@@ -1,0 +1,5 @@
+To run the scripts successfully you must install:
+obspy -- pip install obspy
+segypy -- pip install segypy
+matplotlib -- pip install matplotlib
+numpy -- pip install numpy
